@@ -4,29 +4,38 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchLessonById } from "../features/lessons/lessonsSlice";
 
 export default function LessonDetail() {
+  // 🟢 Lấy id từ URL (vd: /lesson/1 -> id = 1)
   const { id } = useParams();
+
   const dispatch = useDispatch();
-  let navigate =useNavigate()
+  const navigate = useNavigate();
+
+  // 🟢 Lấy state từ Redux
   const { currentLesson, loading } = useSelector((state) => state.lessons);
 
+  // 🟢 Khi component mount hoặc id thay đổi -> fetch chi tiết lesson
   useEffect(() => {
     dispatch(fetchLessonById(id));
   }, [dispatch, id]);
 
+  // 🟢 Trạng thái loading
   if (loading) return <p className="loading">Loading...</p>;
+  // 🟢 Nếu không có dữ liệu
   if (!currentLesson) return <p className="no-data">No data</p>;
 
+  // 🟢 Hàm phát âm text bằng Web Speech API
   const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US"; // phát âm tiếng Anh (Mỹ)
+    utterance.lang = "en-US"; // chọn giọng tiếng Anh (Mỹ)
     speechSynthesis.speak(utterance);
   };
+
   return (
     <div className="lesson-container">
-      {/* Title */}
+      {/* Tiêu đề bài học */}
       <h1 className="lesson-title">📘 {currentLesson.title}</h1>
 
-      {/* Vocabulary */}
+      {/* 📖 Từ vựng */}
       <section className="lesson-section">
         <h2 className="section-title">📖 Từ vựng</h2>
         <table className="vocab-table">
@@ -60,7 +69,8 @@ export default function LessonDetail() {
           </tbody>
         </table>
       </section>
-      {/* Grammar */}
+
+      {/* 💡 Ngữ pháp */}
       <section className="lesson-section">
         <h2 className="section-title">💡 Ngữ pháp</h2>
         <div
@@ -69,7 +79,7 @@ export default function LessonDetail() {
         />
       </section>
 
-      {/* Dialogue */}
+      {/* 💬 Hội thoại */}
       <section className="lesson-section">
         <h2 className="section-title">💬 Hội thoại</h2>
         <div className="dialogue-list">
@@ -106,20 +116,22 @@ export default function LessonDetail() {
         </div>
       </section>
 
-      {/* Listening */}
-
+      {/* 🎧 Listening */}
       {currentLesson.listening && currentLesson.listening.length > 0 && (
         <section className="lesson-section">
           <h2 className="section-title">🎧 Nghe</h2>
+
+          {/* Nút nghe toàn bộ */}
           <button
             className="listen-btn"
             onClick={() =>
               speak(currentLesson.listening.map((item) => item.chu).join(". "))
             }
           >
-            {" "}
             🔊 Nghe toàn bộ
           </button>
+
+          {/* Danh sách từ/câu nghe */}
           <ul className="vocab-list">
             {currentLesson.listening.map((item) => (
               <li key={item.stt}>
@@ -131,6 +143,8 @@ export default function LessonDetail() {
           </ul>
         </section>
       )}
+
+      {/* 📝 Nút chuyển sang trang bài tập */}
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <button
           className="exercise-btn"
