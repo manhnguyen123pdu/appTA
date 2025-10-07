@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchLessons = createAsyncThunk(
   "lessons/fetchLessons", // tên action type
   async () => {
-    const res = await fetch("https://wrfx9j-8080.csb.app/lessons"); // gọi API
+    const res = await fetch("https://86fqwk-8080.csb.app/lessons"); // gọi API
     return await res.json(); // trả về dữ liệu JSON
   }
 );
@@ -14,7 +14,7 @@ export const fetchLessons = createAsyncThunk(
 export const fetchLessonById = createAsyncThunk(
   "lessons/fetchLessonById", // tên action type
   async (id) => {
-    const res = await fetch(`https://wrfx9j-8080.csb.app/lessons/${id}`);
+    const res = await fetch(`https://86fqwk-8080.csb.app/lessons/${id}`);
     return await res.json(); // trả về dữ liệu chi tiết 1 lesson
   }
 );
